@@ -29,7 +29,7 @@ public class TipsMessage {
      */
     private String content;
     /**
-     * 具体显示时间
+     * 具体显示时间 1s.3s.5s
      */
     private int hintTime;
 
