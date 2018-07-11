@@ -11,14 +11,22 @@ import java.util.Random;
  */
 public class Utils {
 
+    /**
+     * 警告总数
+     */
+    public static int warningCount;
+    /**
+     * 提醒总数
+     */
+    public static int promptCount;
 
     public static TipsMessage perpareMessageData(int clickCount) {
         Random rand = new Random();
-        int result = rand.nextInt(10);
+        int result = rand.nextInt(3);
         TipsMessage tipsMessage;
-        if (result <= 3) {
+        if (result == 0) {
             tipsMessage = new TipsMessage(1, "警告：:::" + String.valueOf(clickCount), 5000);
-        } else if (result >= 7) {
+        } else if (result == 1) {
             tipsMessage = new TipsMessage(2, "提醒：:::" + String.valueOf(clickCount), 3000);
         } else {
             tipsMessage = new TipsMessage(3, "通知：:::" + String.valueOf(clickCount), 1000);
@@ -26,8 +34,8 @@ public class Utils {
         return tipsMessage;
     }
 
-    public static int getTypeColor(Context context,int type){
-        int typeColor=0;
+    public static int getTypeColor(Context context, int type) {
+        int typeColor = 0;
         switch (type) {
             case TipsMessage.WARNING:
                 typeColor = context.getResources().getColor(R.color.warning);
@@ -42,5 +50,17 @@ public class Utils {
                 break;
         }
         return typeColor;
+    }
+
+    public static void updateMsgCount(TipsMessage t) throws IllegalArgumentException {
+        if (t == null) {
+            throw new IllegalArgumentException("message data is null ...");
+        }
+        int msgType = t.getType();
+        if (msgType == 1) {
+            --warningCount;
+        } else if (msgType == 2) {
+            --promptCount;
+        }
     }
 }

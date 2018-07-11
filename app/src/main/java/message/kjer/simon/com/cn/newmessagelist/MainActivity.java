@@ -9,7 +9,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,39 +27,51 @@ public class MainActivity extends AppCompatActivity {
     Button addNewMessageBt;
     @BindView(R.id.notify_bt)
     Button notifyBt;
+    @BindView(R.id.message_list_view)
+    ListView messageListView;
+
+    MessageListAdaptet messageListAdapter;
+    LinkedList<TipsMessage> mDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initView();
+    }
 
+    private void initView() {
+        mDataList = new LinkedList<TipsMessage>();
+        messageListAdapter = new MessageListAdaptet(this, mDataList);
+        messageListView.setAdapter(messageListAdapter);
     }
 
     @OnClick({R.id.new_message_tv, R.id.add_new_message_bt, R.id.notify_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_new_message_bt:
-                showMsgAndUpdateList();
+                addMessageAndUpdate();
                 break;
-            case R.id.notify_bt:
-                testViewPostUpdate();
-                break;
+//            case R.id.notify_bt:
+//                testViewPostUpdate();
+//                break;
         }
     }
 
-    private void testViewPostUpdate() {
-        notifyBt.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notifyBt.setVisibility(View.GONE);
-            }
-        },3*1000);
-    }
+//    private void testViewPostUpdate() {
+//        notifyBt.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                notifyBt.setVisibility(View.GONE);
+//            }
+//        }, 3 * 1000);
+//    }
 
-    int clickCount;
 
-    private void showMsgAndUpdateList() {
+    private int clickCount;
+
+    private void addMessageAndUpdate() {
         mHandler.removeCallbacks(mMessgaeRunable);
         TipsMessage tipsMessage = Utils.perpareMessageData(clickCount);
         clickCount++;
@@ -76,11 +91,28 @@ public class MainActivity extends AppCompatActivity {
         newMessageTv.setTextColor(typeColor);
         newMessageTv.setText(s);
         mHandler.postDelayed(mMessgaeRunable, tipsMessage.getHintTime());
+        insertDataToList(tipsMessage);
+        messageListAdapter.notifyDataSetChanged();
+    }
 
-        // TODO: 2018/7/10  将封装好的 通知bean 添加到 list
 
-        // TODO: 2018/7/10   添加排序   
-        // TODO: 2018/7/10  移除时更新对应角标
+    private void insertDataToList(TipsMessage msg) {
+        switch (msg.getType()) {
+            case TipsMessage.WARNING:
+                mDataList.add(0, msg);
+                ++Utils.warningCount;
+                break;
+            case TipsMessage.PROMPT:
+                mDataList.add(Utils.warningCount, msg);
+                ++Utils.promptCount;
+
+                break;
+            case TipsMessage.NOTICE:
+                mDataList.add(Utils.promptCount+Utils.warningCount, msg);
+                break;
+        }
+        Log.e("Main","Utils.warningCount="+Utils.warningCount+
+        " Utils.promptCount="+Utils.promptCount+" mDataList.size="+mDataList.size());
     }
 
     @SuppressLint("HandlerLeak")
