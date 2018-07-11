@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

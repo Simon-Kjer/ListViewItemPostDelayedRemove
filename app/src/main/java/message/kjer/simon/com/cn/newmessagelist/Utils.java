@@ -25,11 +25,11 @@ public class Utils {
         int result = rand.nextInt(3);
         TipsMessage tipsMessage;
         if (result == 0) {
-            tipsMessage = new TipsMessage(1, "警告：:::" + String.valueOf(clickCount), 5000);
+            tipsMessage = new TipsMessage(1, "警告：:::" + String.valueOf(clickCount), 4000);
         } else if (result == 1) {
-            tipsMessage = new TipsMessage(2, "提醒：:::" + String.valueOf(clickCount), 3000);
+            tipsMessage = new TipsMessage(2, "提醒：:::" + String.valueOf(clickCount), 2500);
         } else {
-            tipsMessage = new TipsMessage(3, "通知：:::" + String.valueOf(clickCount), 1000);
+            tipsMessage = new TipsMessage(3, "通知：:::" + String.valueOf(clickCount), 1500);
         }
         return tipsMessage;
     }

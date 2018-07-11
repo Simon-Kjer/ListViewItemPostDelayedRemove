@@ -3,6 +3,7 @@ package message.kjer.simon.com.cn.newmessagelist;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,13 +16,14 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
  * @author simon.
- * Date: 2018/7/10.
- * Description:
+ *         Date: 2018/7/10.
+ *         Description:
  */
 public class MessageListAdaptet extends BaseAdapter {
     private final Context mContext;
@@ -53,16 +55,17 @@ public class MessageListAdaptet extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if (convertView == null) {
+//        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.adapter_main_list_item, parent, false);
 
             holder = new ViewHolder();
-            holder.contentTv = (TextView) convertView.findViewById(R.id.content_tv);
+            holder.contentTv = (MyDataTextView) convertView.findViewById(R.id.content_tv);
             convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        if (mDataList != null && mDataList.size() > 0) {
+//        } else {
+//            holder = (ViewHolder) convertView.getTag();
+//        }
+        if (mDataList != null && mDataList.size() > 0&&holder.contentTv.getMessage()==null) {
+            holder.contentTv.setMessage(mDataList.get(position));
             int type = mDataList.get(position).getType();
             if (type > 0) {
                 holder.contentTv.setTextColor(Utils.getTypeColor(mContext, type));
@@ -73,79 +76,122 @@ public class MessageListAdaptet extends BaseAdapter {
             }
             final ViewHolder finalHolder = holder;
 
+            holder.contentTv.setMessage(mDataList.get(position));
             holder.contentTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finalHolder.contentTv.removeCallbacks(null);
-                    TipsMessage t = mDataList.get(position);
-                    Utils.updateMsgCount(t);
-                    mDataList.remove(t);
+                    MyDataTextView vv = (MyDataTextView) v;
+                    TipsMessage msg = vv.getMessage();
+//                    TipsMessage t = mDataList.get(position);
+                    Log.e("MainActivity", " position=" + position + "  index=" + mDataList.indexOf(msg));
+                    Utils.updateMsgCount(msg);
+                    mDataList.remove(msg);
                     MessageListAdaptet.this.notifyDataSetChanged();
                 }
             });
 
-            if (checkMap.get(holder.contentTv.hashCode()) == null) {
+//            if (checkMap.get()) {
 
-                Log.e("MainActivity", "holder.contentTv.hashCode()=" + holder.contentTv.hashCode());
+                Log.e("MainActivity", "contentTv.hashCode()=" + holder.contentTv.hashCode()
+                        + "  mDataList.size()=" + mDataList.size());
                 final ViewHolder finalHolder1 = holder;
 
-                //type 1
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mDataList != null &&
-                                mDataList.size() > position) {
-                            TipsMessage t = mDataList.get(position);
-                            if (t != null) {
-                                mDataList.remove(t);
-                                checkMap.remove(finalHolder1.contentTv.hashCode());
-                                Utils.updateMsgCount(t);
-//                                Log.d("MainActivity", "adapter   ...mDataList size=" + mDataList
-//                                        .size());
-                                MessageListAdaptet.this.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }, mDataList.get(position).getHintTime());
-
-                //type 2
-//                boolean ok = holder.contentTv.postDelayed(new Runnable() {
+//                //type 1
+//                mHandler.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
 //                        if (mDataList != null &&
 //                                mDataList.size() > position) {
 //                            TipsMessage t = mDataList.get(position);
 //                            if (t != null) {
+//                                Log.e("MainActivity", "adapter  content=== " + mDataList.get
+//                                        (position).getContent());
 //                                mDataList.remove(t);
 //                                checkMap.remove(finalHolder1.contentTv.hashCode());
 //                                Utils.updateMsgCount(t);
-////                                Log.d("MainActivity", "adapter   ...mDataList size=" + mDataList
-////                                        .size());
 //                                MessageListAdaptet.this.notifyDataSetChanged();
 //                            }
 //                        }
 //                    }
 //                }, mDataList.get(position).getHintTime());
-//                holder.contentTv.setTag(holder.contentTv.hashCode(), true);
+
+                //type 2
+                holder.contentTv.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finalHolder1.contentTv.removeCallbacks(null);
+                        if (mDataList != null && mDataList.size() > 0) {
+                            TipsMessage message = finalHolder1.contentTv.getMessage();
+                            int indexOf = mDataList.indexOf(message);
+                            if(indexOf>=0){
+                                Log.e("MainActivity", "----------adapter  content= "
+                                        + message.getContent()+"  indexOf=" + indexOf);
+//                    TipsMessage t = mDataList.get(position);
+                            mDataList.remove(message);
+                            checkMap.remove(finalHolder1.contentTv.hashCode());
+                            Utils.updateMsgCount(message);
+                            MessageListAdaptet.this.notifyDataSetChanged();
+                            }
+
+                        }
+                    }
+                }, mDataList.get(position).getHintTime());
+//                holder.contentTv.setTag(finalHolder1.contentTv.hashCode(), true);
 
                 //type3
 //                updateItemViews(holder, position);
 
 
+                //type 4
+//                mThreadHandler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+////                        if (mDataList != null &&
+////                                mDataList.size() > position) {
+////                            TipsMessage t = mDataList.get(position);
+////                            if (t != null) {
+////                                Log.e("MainActivity", "adapter  content=== " + mDataList.get
+////                                        (position).getContent());
+////                                mDataList.remove(t);
+////                                checkMap.remove(finalHolder1.contentTv.hashCode());
+////                                Utils.updateMsgCount(t);
+////                                MessageListAdaptet.this.notifyDataSetChanged();
+////                            }
+////                        }
+//                    }
+//                }, mDataList.get(position).getHintTime());
+
                 checkMap.put(holder.contentTv.hashCode(), true);
-            } else {
-                Log.e("MainActivity", "else  hashCode()=" + holder.contentTv.hashCode());
-            }
+//            } else {
+////                Log.e("MainActivity", "else  hashCode()=" + holder.contentTv.hashCode());
+//            }
         }
         return convertView;
     }
 
+    HandlerThread mHandlerThread;
+    Handler mThreadHandler;
+
+    private void initThread() {
+        mHandlerThread = new HandlerThread("check-message-coming");
+        mHandlerThread.start();
+
+        mThreadHandler = new Handler(mHandlerThread.getLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+
+            }
+        };
+
+    }
 
     @SuppressLint("UseSparseArrays")
     private HashMap<Integer, Boolean> checkMap = new HashMap<>();
 
     private class ViewHolder {
-        TextView contentTv;
+        MyDataTextView contentTv;
     }
 
     @SuppressLint("HandlerLeak")
@@ -162,18 +208,20 @@ public class MessageListAdaptet extends BaseAdapter {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                Log.e("MainActivity", "updateItemViews  ===>   hashCode()=" + holder.contentTv
-                        .hashCode());
-                if (mDataList != null &&
-                        mDataList.size() > position) {
-                    TipsMessage t = mDataList.get(position);
-                    if (t != null) {
-                        mDataList.remove(t);
-                        checkMap.remove(holder.contentTv.hashCode());
-                        Utils.updateMsgCount(t);
-                        mHandler.sendEmptyMessage(0);
+//                Log.e("MainActivity", "updateItemViews  ===>   hashCode()=" + holder.contentTv
+//                        .hashCode());
+                holder.contentTv.removeCallbacks(null);
+                if (mDataList != null && mDataList.size() >= 0) {
+                    TipsMessage message = holder.contentTv.getMessage();
+                    int indexOf = mDataList.indexOf(message);
+                    Log.e("MainActivity", "adapter  content=== " + message.getContent() +
+                            "  position=" + position + "  indexOf=" + indexOf);
+//                    TipsMessage t = mDataList.get(position);
+                    mDataList.remove(message);
+                    checkMap.remove(holder.contentTv.hashCode());
+                    Utils.updateMsgCount(message);
+                    mHandler.sendEmptyMessage(0);
 //                    MessageListAdaptet.this.notifyDataSetChanged();
-                    }
                 }
             }
         };
