@@ -33,16 +33,18 @@
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="76dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginTop="27dp"
         android:padding="16dp"
         android:text="add_new" />
 
-    <Button
-        android:id="@+id/notify_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/add_new_message_bt"
-        android:text="test" />
+    <LinearLayout
+        android:id="@+id/view_group"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="62dp"
+        android:orientation="vertical" />
+
 </RelativeLayout>

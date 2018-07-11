@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     TextView newMessageTv;
     @BindView(R.id.add_new_message_bt)
     Button addNewMessageBt;
-    @BindView(R.id.notify_bt)
-    Button notifyBt;
     @BindView(R.id.message_list_view)
     ListView messageListView;
 
@@ -47,28 +45,14 @@ public class MainActivity extends AppCompatActivity {
         messageListView.setAdapter(messageListAdapter);
     }
 
-    @OnClick({R.id.new_message_tv, R.id.add_new_message_bt, R.id.notify_bt})
+    @OnClick({R.id.new_message_tv, R.id.add_new_message_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_new_message_bt:
                 addMessageAndUpdate();
                 break;
-//            case R.id.notify_bt:
-//                testViewPostUpdate();
-//                break;
         }
     }
-
-//    private void testViewPostUpdate() {
-//        notifyBt.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                notifyBt.setVisibility(View.GONE);
-//            }
-//        }, 3 * 1000);
-//    }
-
-
     private int clickCount;
 
     private void addMessageAndUpdate() {
@@ -110,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             case TipsMessage.NOTICE:
                 mDataList.add(Utils.promptCount+Utils.warningCount, msg);
                 break;
+
         }
         Log.e("Main","Utils.warningCount="+Utils.warningCount+
         " Utils.promptCount="+Utils.promptCount+" mDataList.size="+mDataList.size());

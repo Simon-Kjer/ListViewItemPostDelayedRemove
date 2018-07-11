@@ -2,6 +2,8 @@ package message.kjer.simon.com.cn.newmessagelist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,9 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author simon.
@@ -67,6 +72,7 @@ public class MessageListAdaptet extends BaseAdapter {
                 holder.contentTv.setText(content);
             }
             final ViewHolder finalHolder = holder;
+
             holder.contentTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,13 +83,17 @@ public class MessageListAdaptet extends BaseAdapter {
                     MessageListAdaptet.this.notifyDataSetChanged();
                 }
             });
-            if (checkMap.get(holder.contentTv.hashCode())==null) {
-                Log.e("MainActivity","holder.contentTv.hashCode()="+holder.contentTv.hashCode());
+
+            if (checkMap.get(holder.contentTv.hashCode()) == null) {
+
+                Log.e("MainActivity", "holder.contentTv.hashCode()=" + holder.contentTv.hashCode());
                 final ViewHolder finalHolder1 = holder;
-                holder.contentTv.postDelayed(new Runnable() {
+
+                //type 1
+                mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (mDataList != null  &&
+                        if (mDataList != null &&
                                 mDataList.size() > position) {
                             TipsMessage t = mDataList.get(position);
                             if (t != null) {
@@ -97,19 +107,76 @@ public class MessageListAdaptet extends BaseAdapter {
                         }
                     }
                 }, mDataList.get(position).getHintTime());
+
+                //type 2
+//                boolean ok = holder.contentTv.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (mDataList != null &&
+//                                mDataList.size() > position) {
+//                            TipsMessage t = mDataList.get(position);
+//                            if (t != null) {
+//                                mDataList.remove(t);
+//                                checkMap.remove(finalHolder1.contentTv.hashCode());
+//                                Utils.updateMsgCount(t);
+////                                Log.d("MainActivity", "adapter   ...mDataList size=" + mDataList
+////                                        .size());
+//                                MessageListAdaptet.this.notifyDataSetChanged();
+//                            }
+//                        }
+//                    }
+//                }, mDataList.get(position).getHintTime());
 //                holder.contentTv.setTag(holder.contentTv.hashCode(), true);
+
+                //type3
+//                updateItemViews(holder, position);
+
+
                 checkMap.put(holder.contentTv.hashCode(), true);
-            }else{
-                Log.e("MainActivity","else  hashCode()="+holder.contentTv.hashCode());
+            } else {
+                Log.e("MainActivity", "else  hashCode()=" + holder.contentTv.hashCode());
             }
         }
         return convertView;
     }
+
 
     @SuppressLint("UseSparseArrays")
     private HashMap<Integer, Boolean> checkMap = new HashMap<>();
 
     private class ViewHolder {
         TextView contentTv;
+    }
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            MessageListAdaptet.this.notifyDataSetChanged();
+        }
+    };
+
+
+    private void updateItemViews(final ViewHolder holder, final int position) {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Log.e("MainActivity", "updateItemViews  ===>   hashCode()=" + holder.contentTv
+                        .hashCode());
+                if (mDataList != null &&
+                        mDataList.size() > position) {
+                    TipsMessage t = mDataList.get(position);
+                    if (t != null) {
+                        mDataList.remove(t);
+                        checkMap.remove(holder.contentTv.hashCode());
+                        Utils.updateMsgCount(t);
+                        mHandler.sendEmptyMessage(0);
+//                    MessageListAdaptet.this.notifyDataSetChanged();
+                    }
+                }
+            }
+        };
+        timer.schedule(timerTask, mDataList.get(position).getHintTime());
     }
 }
