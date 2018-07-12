@@ -33,6 +33,21 @@ public class TipsMessage {
      */
     private int hintTime;
 
+    public boolean isFirstAdd() {
+        return firstAdd;
+    }
+
+    public void setFirstAdd(boolean firstAdd) {
+        this.firstAdd = firstAdd;
+    }
+
+    /**
+     * 第一次添加
+     */
+    private boolean firstAdd;
+
+
+
     public TipsMessage(int type, String content, int hintTime) {
         this.type = type;
         this.content = content;

@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static message.kjer.simon.com.cn.newmessagelist.R.layout.adapter_main_list_item;
 
 /**
  * @author simon.
@@ -30,11 +34,13 @@ public class MessageListAdaptet extends BaseAdapter {
     private LinkedList<TipsMessage> mDataList;
 
     private LayoutInflater mInflater;
+    private  Animation animation;
 
     public MessageListAdaptet(Context context, LinkedList<TipsMessage> mDataList) {
         this.mContext = context;
         this.mDataList = mDataList;
         mInflater = LayoutInflater.from(context);
+        animation = AnimationUtils.loadAnimation(mContext, R.anim.item_animation);
     }
 
     @Override
@@ -56,15 +62,21 @@ public class MessageListAdaptet extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
 //        if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.adapter_main_list_item, parent, false);
+            convertView = mInflater.inflate(adapter_main_list_item, parent, false);
 
             holder = new ViewHolder();
             holder.contentTv = (MyDataTextView) convertView.findViewById(R.id.content_tv);
-            convertView.setTag(holder);
+//            convertView.setTag(holder);
+
 //        } else {
 //            holder = (ViewHolder) convertView.getTag();
 //        }
+//        convertView.startAnimation(animation);
+//        if(!mDataList.get(position).isFirstAdd()){
+//            mDataList.get(position).setFirstAdd(true);
+//        }
         if (mDataList != null && mDataList.size() > 0&&holder.contentTv.getMessage()==null) {
+
             holder.contentTv.setMessage(mDataList.get(position));
             int type = mDataList.get(position).getType();
             if (type > 0) {
@@ -93,8 +105,8 @@ public class MessageListAdaptet extends BaseAdapter {
 
 //            if (checkMap.get()) {
 
-                Log.e("MainActivity", "contentTv.hashCode()=" + holder.contentTv.hashCode()
-                        + "  mDataList.size()=" + mDataList.size());
+//                Log.e("MainActivity", "contentTv.hashCode()=" + holder.contentTv.hashCode()
+//                        + "  mDataList.size()=" + mDataList.size());
                 final ViewHolder finalHolder1 = holder;
 
 //                //type 1
