@@ -8,16 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.message_list_view)
     ListView messageListView;
 
-    MessageListAdaptet messageListAdapter;
+    MessageListAdapter messageListAdapter;
     LinkedList<TipsMessage> mDataList;
 
     @Override
@@ -46,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mDataList = new LinkedList<TipsMessage>();
-        messageListAdapter = new MessageListAdaptet(this, mDataList);
+        messageListAdapter = new MessageListAdapter(this, mDataList);
         messageListView.setAdapter(messageListAdapter);
 
         //整体动画
