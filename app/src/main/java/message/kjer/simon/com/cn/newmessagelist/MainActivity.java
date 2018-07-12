@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
     private int clickCount;
 
     private void addMessageAndUpdate() {
@@ -81,29 +82,43 @@ public class MainActivity extends AppCompatActivity {
         newMessageTv.setTextColor(typeColor);
         newMessageTv.setText(s);
         mHandler.postDelayed(mMessgaeRunable, tipsMessage.getHintTime());
-        insertDataToList(tipsMessage);
+        int i = insertDataToList(tipsMessage);
+        messageListView.smoothScrollToPosition(i);
         messageListAdapter.notifyDataSetChanged();
     }
 
 
-    private void insertDataToList(TipsMessage msg) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //页面销毁 ，清除参数
+        Utils.warningCount = 0;
+        Utils.promptCount = 0;
+        mDataList.clear();
+    }
+
+    private int  insertDataToList(TipsMessage msg) {
+        int index=0;
         switch (msg.getType()) {
             case TipsMessage.WARNING:
-                mDataList.add(0, msg);
+                mDataList.add(index, msg);
                 ++Utils.warningCount;
                 break;
             case TipsMessage.PROMPT:
-                mDataList.add(Utils.warningCount, msg);
+                index=Utils.warningCount;
+                mDataList.add(index, msg);
                 ++Utils.promptCount;
-
                 break;
             case TipsMessage.NOTICE:
-                mDataList.add(Utils.promptCount+Utils.warningCount, msg);
+                index=Utils.promptCount + Utils.warningCount;
+                mDataList.add(index, msg);
                 break;
 
         }
-        Log.e("Main","Utils.warningCount="+Utils.warningCount+
-        " Utils.promptCount="+Utils.promptCount+" mDataList.size="+mDataList.size());
+        Log.e("Main", "Utils.warningCount=" + Utils.warningCount +
+                " Utils.promptCount=" + Utils.promptCount + " mDataList.size=" + mDataList.size()
+        +" index="+index);
+        return index;
     }
 
     @SuppressLint("HandlerLeak")

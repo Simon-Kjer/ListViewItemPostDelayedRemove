@@ -32,7 +32,7 @@ public class MessageListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private Animation animation;
-    public static final String Tag="MessageListAdapter";
+    public static final String Tag = "MessageListAdapter";
 
     public MessageListAdapter(Context context, LinkedList<TipsMessage> mDataList) {
         this.mContext = context;
@@ -78,13 +78,14 @@ public class MessageListAdapter extends BaseAdapter {
                 }
             });
 
-            Log.e(Tag,"!isFirstadd ="+!mDataList.get(position).isFirstAdd());
-        if(!mDataList.get(position).isFirstAdd()){
-
-            finalHolder.contentTv.startAnimation(animation);
-            mDataList.get(position).setFirstAdd(true);
-        }
-            postRemoveItem(position, holder);
+            Log.e(Tag, "!isFirstadd =" + !mDataList.get(position).isFirstAdd());
+            if (!mDataList.get(position).isFirstAdd()) {
+                finalHolder.contentTv.startAnimation(animation);
+                mDataList.get(position).setFirstAdd(true);
+            }
+            if(mDataList.get(position).getType()!=1){
+                postRemoveItem(position, holder);
+            }
         }
         return convertView;
     }
