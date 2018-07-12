@@ -26,15 +26,15 @@ import static message.kjer.simon.com.cn.newmessagelist.R.layout.adapter_main_lis
 
 /**
  * @author simon.
- *         Date: 2018/7/10.
- *         Description:
+ * Date: 2018/7/10.
+ * Description:
  */
 public class MessageListAdaptet extends BaseAdapter {
     private final Context mContext;
     private LinkedList<TipsMessage> mDataList;
 
     private LayoutInflater mInflater;
-    private  Animation animation;
+    private Animation animation;
 
     public MessageListAdaptet(Context context, LinkedList<TipsMessage> mDataList) {
         this.mContext = context;
@@ -62,10 +62,10 @@ public class MessageListAdaptet extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
 //        if (convertView == null) {
-            convertView = mInflater.inflate(adapter_main_list_item, parent, false);
+        convertView = mInflater.inflate(adapter_main_list_item, parent, false);
 
-            holder = new ViewHolder();
-            holder.contentTv = (MyDataTextView) convertView.findViewById(R.id.content_tv);
+        holder = new ViewHolder();
+        holder.contentTv = (MyDataTextView) convertView.findViewById(R.id.content_tv);
 //            convertView.setTag(holder);
 
 //        } else {
@@ -75,7 +75,7 @@ public class MessageListAdaptet extends BaseAdapter {
 //        if(!mDataList.get(position).isFirstAdd()){
 //            mDataList.get(position).setFirstAdd(true);
 //        }
-        if (mDataList != null && mDataList.size() > 0&&holder.contentTv.getMessage()==null) {
+        if (mDataList != null && mDataList.size() > 0 && holder.contentTv.getMessage() == null) {
 
             holder.contentTv.setMessage(mDataList.get(position));
             int type = mDataList.get(position).getType();
@@ -96,7 +96,8 @@ public class MessageListAdaptet extends BaseAdapter {
                     MyDataTextView vv = (MyDataTextView) v;
                     TipsMessage msg = vv.getMessage();
 //                    TipsMessage t = mDataList.get(position);
-                    Log.e("MainActivity", " position=" + position + "  index=" + mDataList.indexOf(msg));
+                    Log.e("MainActivity", " position=" + position + "  index=" + mDataList
+                            .indexOf(msg));
                     Utils.updateMsgCount(msg);
                     mDataList.remove(msg);
                     MessageListAdaptet.this.notifyDataSetChanged();
@@ -107,7 +108,7 @@ public class MessageListAdaptet extends BaseAdapter {
 
 //                Log.e("MainActivity", "contentTv.hashCode()=" + holder.contentTv.hashCode()
 //                        + "  mDataList.size()=" + mDataList.size());
-                final ViewHolder finalHolder1 = holder;
+            final ViewHolder finalHolder1 = holder;
 
 //                //type 1
 //                mHandler.postDelayed(new Runnable() {
@@ -128,34 +129,34 @@ public class MessageListAdaptet extends BaseAdapter {
 //                    }
 //                }, mDataList.get(position).getHintTime());
 
-                //type 2
-                holder.contentTv.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finalHolder1.contentTv.removeCallbacks(null);
-                        if (mDataList != null && mDataList.size() > 0) {
-                            TipsMessage message = finalHolder1.contentTv.getMessage();
-                            int indexOf = mDataList.indexOf(message);
-                            if(indexOf>=0){
-                                Log.e("MainActivity", "----------adapter  content= "
-                                        + message.getContent()+"  indexOf=" + indexOf);
+            //type 2
+            holder.contentTv.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finalHolder1.contentTv.removeCallbacks(null);
+                    if (mDataList != null && mDataList.size() > 0) {
+                        TipsMessage message = finalHolder1.contentTv.getMessage();
+                        int indexOf = mDataList.indexOf(message);
+                        if (indexOf >= 0) {
+                            Log.e("MainActivity", "----------adapter  content= "
+                                    + message.getContent() + "  indexOf=" + indexOf);
 //                    TipsMessage t = mDataList.get(position);
                             mDataList.remove(message);
                             checkMap.remove(finalHolder1.contentTv.hashCode());
                             Utils.updateMsgCount(message);
                             MessageListAdaptet.this.notifyDataSetChanged();
-                            }
-
                         }
+
                     }
-                }, mDataList.get(position).getHintTime());
+                }
+            }, mDataList.get(position).getHintTime());
 //                holder.contentTv.setTag(finalHolder1.contentTv.hashCode(), true);
 
-                //type3
+            //type3
 //                updateItemViews(holder, position);
 
 
-                //type 4
+            //type 4
 //                mThreadHandler.postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -175,7 +176,7 @@ public class MessageListAdaptet extends BaseAdapter {
 //                    }
 //                }, mDataList.get(position).getHintTime());
 
-                checkMap.put(holder.contentTv.hashCode(), true);
+//                checkMap.put(holder.contentTv.hashCode(), true);
 //            } else {
 ////                Log.e("MainActivity", "else  hashCode()=" + holder.contentTv.hashCode());
 //            }
