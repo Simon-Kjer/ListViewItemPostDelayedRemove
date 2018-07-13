@@ -1,25 +1,26 @@
-package message.kjer.simon.com.cn.newmessagelist;
+package message.kjer.simon.com.cn.newmessagelist.custom;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.TextView;
+
+import message.kjer.simon.com.cn.newmessagelist.bean.HoverMessage;
 
 /**
  * @author simon.
  * Date: 2018/7/11.
  * Description:
  */
-public class MyDataTextView extends android.support.v7.widget.AppCompatTextView {
-    public MyDataTextView(Context context) {
+public class MMessageTextView extends android.support.v7.widget.AppCompatTextView {
+    public MMessageTextView(Context context) {
         super(context);
     }
 
-    public MyDataTextView(Context context, @Nullable AttributeSet attrs) {
+    public MMessageTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyDataTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MMessageTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 //
@@ -28,13 +29,13 @@ public class MyDataTextView extends android.support.v7.widget.AppCompatTextView 
 //        super(context, attrs, defStyleAttr, defStyleRes);
 //    }
 
-    private TipsMessage message;
+    private HoverMessage message;
 
-    public TipsMessage getMessage() {
+    public HoverMessage getMessage() {
         return message;
     }
 
-    public void setMessage(TipsMessage message) {
+    public void setMessage(HoverMessage message) {
         this.message = message;
     }
 }

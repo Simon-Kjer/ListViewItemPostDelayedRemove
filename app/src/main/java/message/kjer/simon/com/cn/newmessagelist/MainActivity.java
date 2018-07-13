@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import message.kjer.simon.com.cn.newmessagelist.adapter.MessageListAdapter;
+import message.kjer.simon.com.cn.newmessagelist.bean.HoverMessage;
 
 public class MainActivity extends AppCompatActivity {
     public static final String Tag = "MainActivity";
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     ListView messageListView;
 
     MessageListAdapter messageListAdapter;
-    LinkedList<TipsMessage> mDataList;
+    LinkedList<HoverMessage> mDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mDataList = new LinkedList<TipsMessage>();
+        mDataList = new LinkedList<HoverMessage>();
         messageListAdapter = new MessageListAdapter(this, mDataList);
         messageListView.setAdapter(messageListAdapter);
 
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addMessageAndUpdate() {
         mHandler.removeCallbacks(mMessgaeRunable);
-        TipsMessage tipsMessage = Utils.perpareMessageData(clickCount);
+        HoverMessage tipsMessage = Utils.perpareMessageData(clickCount);
         clickCount++;
         if (tipsMessage == null) {
             return;
@@ -97,19 +99,19 @@ public class MainActivity extends AppCompatActivity {
         mDataList.clear();
     }
 
-    private int  insertDataToList(TipsMessage msg) {
+    private int  insertDataToList(HoverMessage msg) {
         int index=0;
         switch (msg.getType()) {
-            case TipsMessage.WARNING:
+            case HoverMessage.WARNING:
                 mDataList.add(index, msg);
                 ++Utils.warningCount;
                 break;
-            case TipsMessage.PROMPT:
+            case HoverMessage.PROMPT:
                 index=Utils.warningCount;
                 mDataList.add(index, msg);
                 ++Utils.promptCount;
                 break;
-            case TipsMessage.NOTICE:
+            case HoverMessage.NOTICE:
                 index=Utils.promptCount + Utils.warningCount;
                 mDataList.add(index, msg);
                 break;

@@ -1,11 +1,11 @@
-package message.kjer.simon.com.cn.newmessagelist;
+package message.kjer.simon.com.cn.newmessagelist.bean;
 
 /**
  * @author simon.
  * Date: 2018/7/10.
  * Description:
  */
-public class TipsMessage {
+public class HoverMessage {
     /**
      * 警告
      */
@@ -48,7 +48,7 @@ public class TipsMessage {
 
 
 
-    public TipsMessage(int type, String content, int hintTime) {
+    public HoverMessage(int type, String content, int hintTime) {
         this.type = type;
         this.content = content;
         this.hintTime = hintTime;

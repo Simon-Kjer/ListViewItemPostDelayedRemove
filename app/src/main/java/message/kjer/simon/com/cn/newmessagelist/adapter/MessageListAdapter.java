@@ -1,4 +1,4 @@
-package message.kjer.simon.com.cn.newmessagelist;
+package message.kjer.simon.com.cn.newmessagelist.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,8 +16,11 @@ import android.widget.BaseAdapter;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import message.kjer.simon.com.cn.newmessagelist.custom.MMessageTextView;
+import message.kjer.simon.com.cn.newmessagelist.R;
+import message.kjer.simon.com.cn.newmessagelist.bean.HoverMessage;
+import message.kjer.simon.com.cn.newmessagelist.Utils;
 
 import static message.kjer.simon.com.cn.newmessagelist.R.layout.adapter_main_list_item;
 
@@ -28,13 +31,13 @@ import static message.kjer.simon.com.cn.newmessagelist.R.layout.adapter_main_lis
  */
 public class MessageListAdapter extends BaseAdapter {
     private final Context mContext;
-    private LinkedList<TipsMessage> mDataList;
+    private LinkedList<HoverMessage> mDataList;
 
     private LayoutInflater mInflater;
     private Animation animation;
     public static final String Tag = "MessageListAdapter";
 
-    public MessageListAdapter(Context context, LinkedList<TipsMessage> mDataList) {
+    public MessageListAdapter(Context context, LinkedList<HoverMessage> mDataList) {
         this.mContext = context;
         this.mDataList = mDataList;
         mInflater = LayoutInflater.from(context);
@@ -62,8 +65,8 @@ public class MessageListAdapter extends BaseAdapter {
 //        if (convertView == null) {
         convertView = mInflater.inflate(adapter_main_list_item, parent, false);
         holder = new ViewHolder();
-        holder.contentTv = (MyDataTextView) convertView.findViewById(R.id.content_tv);
-//            convertView.setTag(holder);
+        holder.contentTv = (MMessageTextView) convertView.findViewById(R.id.content_tv);
+            convertView.setTag(holder);
 //        } else {
 //            holder = (ViewHolder) convertView.getTag();
 //        }
@@ -74,7 +77,7 @@ public class MessageListAdapter extends BaseAdapter {
             holder.contentTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeClickItem((MyDataTextView) v, finalHolder, position);
+                    removeClickItem((MMessageTextView) v, finalHolder, position);
                 }
             });
 
@@ -90,10 +93,10 @@ public class MessageListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void removeClickItem(MyDataTextView v, ViewHolder finalHolder, int position) {
+    private void removeClickItem(MMessageTextView v, ViewHolder finalHolder, int position) {
         finalHolder.contentTv.removeCallbacks(null);
-        MyDataTextView vv = v;
-        TipsMessage msg = vv.getMessage();
+        MMessageTextView vv = v;
+        HoverMessage msg = vv.getMessage();
 //                    TipsMessage t = mDataList.get(position);
         Log.e(Tag, " position=" + position + "  index=" + mDataList
                 .indexOf(msg));
@@ -146,7 +149,7 @@ public class MessageListAdapter extends BaseAdapter {
             public void run() {
                 finalHolder1.contentTv.removeCallbacks(null);
                 if (mDataList != null && mDataList.size() > 0) {
-                    TipsMessage message = finalHolder1.contentTv.getMessage();
+                    HoverMessage message = finalHolder1.contentTv.getMessage();
                     int indexOf = mDataList.indexOf(message);
                     if (indexOf >= 0) {
                         Log.e(Tag, "----------adapter  content= "
@@ -171,7 +174,7 @@ public class MessageListAdapter extends BaseAdapter {
     private HashMap<Integer, Boolean> checkMap = new HashMap<>();
 
     private class ViewHolder {
-        MyDataTextView contentTv;
+        MMessageTextView contentTv;
     }
 
     @SuppressLint("HandlerLeak")
@@ -183,28 +186,28 @@ public class MessageListAdapter extends BaseAdapter {
     };
 
 
-    private void updateItemViews(final ViewHolder holder, final int position) {
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-//                Log.e("MainActivity", "updateItemViews  ===>   hashCode()=" + holder.contentTv
-//                        .hashCode());
-                holder.contentTv.removeCallbacks(null);
-                if (mDataList != null && mDataList.size() >= 0) {
-                    TipsMessage message = holder.contentTv.getMessage();
-                    int indexOf = mDataList.indexOf(message);
-                    Log.e(Tag, "adapter  content=== " + message.getContent() +
-                            "  position=" + position + "  indexOf=" + indexOf);
-//                    TipsMessage t = mDataList.get(position);
-                    mDataList.remove(message);
-                    checkMap.remove(holder.contentTv.hashCode());
-                    Utils.updateMsgCount(message);
-                    mHandler.sendEmptyMessage(0);
-//                    MessageListAdaptet.this.notifyDataSetChanged();
-                }
-            }
-        };
-        timer.schedule(timerTask, mDataList.get(position).getHintTime());
-    }
+//    private void updateItemViews(final ViewHolder holder, final int position) {
+//        Timer timer = new Timer();
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+////                Log.e("MainActivity", "updateItemViews  ===>   hashCode()=" + holder.contentTv
+////                        .hashCode());
+//                holder.contentTv.removeCallbacks(null);
+//                if (mDataList != null && mDataList.size() >= 0) {
+//                    TipsMessage message = holder.contentTv.getMessage();
+//                    int indexOf = mDataList.indexOf(message);
+//                    Log.e(Tag, "adapter  content=== " + message.getContent() +
+//                            "  position=" + position + "  indexOf=" + indexOf);
+////                    TipsMessage t = mDataList.get(position);
+//                    mDataList.remove(message);
+//                    checkMap.remove(holder.contentTv.hashCode());
+//                    Utils.updateMsgCount(message);
+//                    mHandler.sendEmptyMessage(0);
+////                    MessageListAdaptet.this.notifyDataSetChanged();
+//                }
+//            }
+//        };
+//        timer.schedule(timerTask, mDataList.get(position).getHintTime());
+//    }
 }

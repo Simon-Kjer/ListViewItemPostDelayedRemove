@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.util.Random;
 
+import message.kjer.simon.com.cn.newmessagelist.bean.HoverMessage;
+
 /**
  * @author simon.
  * Date: 2018/7/10.
@@ -20,16 +22,16 @@ public class Utils {
      */
     public static int promptCount;
 
-    public static TipsMessage perpareMessageData(int clickCount) {
+    public static HoverMessage perpareMessageData(int clickCount) {
         Random rand = new Random();
         int result = rand.nextInt(3);
-        TipsMessage tipsMessage;
+        HoverMessage tipsMessage;
         if (result == 0) {
-            tipsMessage = new TipsMessage(1, "警告：:::" + String.valueOf(clickCount), 4000);
+            tipsMessage = new HoverMessage(1, "警告：:::" + String.valueOf(clickCount), 4000);
         } else if (result == 1) {
-            tipsMessage = new TipsMessage(2, "提醒：:::" + String.valueOf(clickCount), 2500);
+            tipsMessage = new HoverMessage(2, "提醒：:::" + String.valueOf(clickCount), 2500);
         } else {
-            tipsMessage = new TipsMessage(3, "通知：:::" + String.valueOf(clickCount), 1500);
+            tipsMessage = new HoverMessage(3, "通知：:::" + String.valueOf(clickCount), 1500);
         }
         return tipsMessage;
     }
@@ -37,13 +39,13 @@ public class Utils {
     public static int getTypeColor(Context context, int type) {
         int typeColor = 0;
         switch (type) {
-            case TipsMessage.WARNING:
+            case HoverMessage.WARNING:
                 typeColor = context.getResources().getColor(R.color.warning);
                 break;
-            case TipsMessage.PROMPT:
+            case HoverMessage.PROMPT:
                 typeColor = context.getResources().getColor(R.color.prompt);
                 break;
-            case TipsMessage.NOTICE:
+            case HoverMessage.NOTICE:
                 typeColor = context.getResources().getColor(R.color.notice);
                 break;
             default:
@@ -52,7 +54,7 @@ public class Utils {
         return typeColor;
     }
 
-    public static void updateMsgCount(TipsMessage t) throws IllegalArgumentException {
+    public static void updateMsgCount(HoverMessage t) throws IllegalArgumentException {
         if (t == null) {
             throw new IllegalArgumentException("message data is null ...");
         }
