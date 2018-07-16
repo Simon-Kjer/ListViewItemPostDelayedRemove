@@ -67,13 +67,12 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
                     if (indexOf >= 0) {
                         Log.e(Tag, "position=" + position + "  list.size()=" + list.size() +
                                 " holder.tv.getMessage().getType()=" + holder.tv.getMessage()
-                                .getType()
-                                + " index =" + indexOf);
+                                .getType() + " index =" + indexOf);
                         list.remove(message);
 
+//                        notifyItemChanged(position);
                         Utils.updateMsgCount(message);
-//                        notifyItemInserted(position);
-                        notifyItemChanged(position);
+                        notifyItemRemoved(indexOf);
 //                        MessageRecycleListAdatper.this.notifyDataSetChanged();
                     }
                 }
