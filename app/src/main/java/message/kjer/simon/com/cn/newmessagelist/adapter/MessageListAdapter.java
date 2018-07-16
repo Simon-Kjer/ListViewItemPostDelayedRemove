@@ -81,7 +81,7 @@ public class MessageListAdapter extends BaseAdapter {
                 }
             });
 
-            Log.e(Tag, "!isFirstadd =" + !mDataList.get(position).isFirstAdd());
+//            Log.e(Tag, "!isFirstadd =" + !mDataList.get(position).isFirstAdd());
             if (!mDataList.get(position).isFirstAdd()) {
                 finalHolder.contentTv.startAnimation(animation);
                 mDataList.get(position).setFirstAdd(true);
@@ -97,7 +97,7 @@ public class MessageListAdapter extends BaseAdapter {
         finalHolder.contentTv.removeCallbacks(null);
         MMessageTextView vv = v;
         HoverMessage msg = vv.getMessage();
-//                    TipsMessage t = mDataList.get(position);
+//                    HoverMessage t = mDataList.get(position);
         Log.e(Tag, " position=" + position + "  index=" + mDataList
                 .indexOf(msg));
         Utils.updateMsgCount(msg);
