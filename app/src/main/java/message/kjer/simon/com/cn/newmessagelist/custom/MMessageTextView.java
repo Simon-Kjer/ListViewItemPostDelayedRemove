@@ -23,11 +23,11 @@ public class MMessageTextView extends android.support.v7.widget.AppCompatTextVie
     public MMessageTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-//
-//    public MyDataTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int
-//            defStyleRes) {
-//        super(context, attrs, defStyleAttr, defStyleRes);
-//    }
+
+    public MMessageTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int
+            defStyleRes) {
+        super(context, attrs, defStyleAttr);
+    }
 
     private HoverMessage message;
 

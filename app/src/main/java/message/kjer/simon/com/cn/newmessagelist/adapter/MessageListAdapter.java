@@ -66,7 +66,7 @@ public class MessageListAdapter extends BaseAdapter {
         convertView = mInflater.inflate(adapter_main_list_item, parent, false);
         holder = new ViewHolder();
         holder.contentTv = (MMessageTextView) convertView.findViewById(R.id.content_tv);
-            convertView.setTag(holder);
+        convertView.setTag(holder);
 //        } else {
 //            holder = (ViewHolder) convertView.getTag();
 //        }
@@ -80,13 +80,11 @@ public class MessageListAdapter extends BaseAdapter {
                     removeClickItem((MMessageTextView) v, finalHolder, position);
                 }
             });
-
-//            Log.e(Tag, "!isFirstadd =" + !mDataList.get(position).isFirstAdd());
             if (!mDataList.get(position).isFirstAdd()) {
                 finalHolder.contentTv.startAnimation(animation);
                 mDataList.get(position).setFirstAdd(true);
             }
-            if(mDataList.get(position).getType()!=1){
+            if (mDataList.get(position).getType() != 1) {
                 postRemoveItem(position, holder);
             }
         }
@@ -97,9 +95,7 @@ public class MessageListAdapter extends BaseAdapter {
         finalHolder.contentTv.removeCallbacks(null);
         MMessageTextView vv = v;
         HoverMessage msg = vv.getMessage();
-//                    HoverMessage t = mDataList.get(position);
-        Log.e(Tag, " position=" + position + "  index=" + mDataList
-                .indexOf(msg));
+        Log.e(Tag, " position=" + position + "  index=" + mDataList.indexOf(msg));
         Utils.updateMsgCount(msg);
         mDataList.remove(msg);
         MessageListAdapter.this.notifyDataSetChanged();
@@ -124,7 +120,6 @@ public class MessageListAdapter extends BaseAdapter {
 
     private void postRemoveItem(int position, ViewHolder holder) {
         final ViewHolder finalHolder1 = holder;
-//                //type 1
 //        mHandler.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -143,7 +138,6 @@ public class MessageListAdapter extends BaseAdapter {
 //            }
 //        }, mDataList.get(position).getHintTime());
 
-        //type 2
         holder.contentTv.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -152,9 +146,8 @@ public class MessageListAdapter extends BaseAdapter {
                     HoverMessage message = finalHolder1.contentTv.getMessage();
                     int indexOf = mDataList.indexOf(message);
                     if (indexOf >= 0) {
-                        Log.e(Tag, "----------adapter  content= "
+                        Log.e(Tag, " adapter  content= "
                                 + message.getContent() + "  indexOf=" + indexOf);
-//                    TipsMessage t = mDataList.get(position);
                         mDataList.remove(message);
                         checkMap.remove(finalHolder1.contentTv.hashCode());
                         Utils.updateMsgCount(message);
@@ -163,11 +156,6 @@ public class MessageListAdapter extends BaseAdapter {
                 }
             }
         }, mDataList.get(position).getHintTime());
-
-//      holder.contentTv.setTag(finalHolder1.contentTv.hashCode(), true);
-
-        //type3
-//       updateItemViews(holder, position);
     }
 
     @SuppressLint("UseSparseArrays")
@@ -184,30 +172,4 @@ public class MessageListAdapter extends BaseAdapter {
             MessageListAdapter.this.notifyDataSetChanged();
         }
     };
-
-
-//    private void updateItemViews(final ViewHolder holder, final int position) {
-//        Timer timer = new Timer();
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-////                Log.e("MainActivity", "updateItemViews  ===>   hashCode()=" + holder.contentTv
-////                        .hashCode());
-//                holder.contentTv.removeCallbacks(null);
-//                if (mDataList != null && mDataList.size() >= 0) {
-//                    TipsMessage message = holder.contentTv.getMessage();
-//                    int indexOf = mDataList.indexOf(message);
-//                    Log.e(Tag, "adapter  content=== " + message.getContent() +
-//                            "  position=" + position + "  indexOf=" + indexOf);
-////                    TipsMessage t = mDataList.get(position);
-//                    mDataList.remove(message);
-//                    checkMap.remove(holder.contentTv.hashCode());
-//                    Utils.updateMsgCount(message);
-//                    mHandler.sendEmptyMessage(0);
-////                    MessageListAdaptet.this.notifyDataSetChanged();
-//                }
-//            }
-//        };
-//        timer.schedule(timerTask, mDataList.get(position).getHintTime());
-//    }
 }

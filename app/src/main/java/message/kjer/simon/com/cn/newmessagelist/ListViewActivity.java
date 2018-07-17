@@ -99,32 +99,33 @@ public class ListViewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         //页面销毁 ，清除参数
-        Utils.warningCount = 0;
-        Utils.promptCount = 0;
-        mDataList.clear();
+        Utils.clearMsgCount();
+        if (mDataList != null) {
+            mDataList.clear();
+        }
     }
 
-    private int  insertDataToList(HoverMessage msg) {
-        int index=0;
+    private int insertDataToList(HoverMessage msg) {
+        int index = 0;
         switch (msg.getType()) {
             case HoverMessage.WARNING:
                 mDataList.add(index, msg);
                 ++Utils.warningCount;
                 break;
             case HoverMessage.PROMPT:
-                index=Utils.warningCount;
+                index = Utils.warningCount;
                 mDataList.add(index, msg);
                 ++Utils.promptCount;
                 break;
             case HoverMessage.NOTICE:
-                index=Utils.promptCount + Utils.warningCount;
+                index = Utils.promptCount + Utils.warningCount;
                 mDataList.add(index, msg);
                 break;
 
         }
         Log.e("Main", "Utils.warningCount=" + Utils.warningCount +
                 " Utils.promptCount=" + Utils.promptCount + " mDataList.size=" + mDataList.size()
-                +" index="+index);
+                + " index=" + index);
         return index;
     }
 

@@ -25,7 +25,7 @@ import message.kjer.simon.com.cn.newmessagelist.bean.HoverMessage;
 /**
  * @author simon.
  * Date: 2018/7/16.
- * Description:
+ * Description: 动态加载item 到列表，规定时间内 自动消失。部分类型 点击消失。
  */
 public class RecyclerviewActivity extends AppCompatActivity {
 
@@ -38,7 +38,7 @@ public class RecyclerviewActivity extends AppCompatActivity {
     RecyclerView recyclerview;
 
     MessageRecycleListAdatper messageRecycleListAdatper;
-    ArrayList<HoverMessage> datas;
+    ArrayList<HoverMessage> datasList;
     @BindView(R.id.new_message_tv)
     TextView newMessageTv;
 
@@ -51,36 +51,24 @@ public class RecyclerviewActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerview.setLayoutManager(linearLayoutManager);
 //      获取数据，向适配器传数据，绑定适配器
-//        datas = initData();
-        datas = new ArrayList<HoverMessage>();
-        messageRecycleListAdatper = new MessageRecycleListAdatper(RecyclerviewActivity.this, datas);
+        datasList = new ArrayList<HoverMessage>();
+        messageRecycleListAdatper = new MessageRecycleListAdatper(RecyclerviewActivity.this,
+                datasList);
         recyclerview.setAdapter(messageRecycleListAdatper);
 //      添加动画
         DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         defaultItemAnimator.setAddDuration(1000);
         defaultItemAnimator.setRemoveDuration(1000);
         recyclerview.setItemAnimator(defaultItemAnimator);
-
-//        recyclerview.setItemAnimator(new DefaultItemAnimator());
-        myOnClick();
     }
 
-    private void myOnClick() {
-        addItemBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//              添加自带默认动画
-                addMessageAndUpdate();
-            }
-        });
-        deleteItemBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//               删除自带默认动画
-                messageRecycleListAdatper.removeData(0);
-
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (datasList != null) {
+            datasList.clear();
+        }
+        Utils.clearMsgCount();
     }
 
     @SuppressLint("HandlerLeak")
@@ -121,51 +109,39 @@ public class RecyclerviewActivity extends AppCompatActivity {
         mHandler.postDelayed(mMessgaeRunable, tipsMessage.getHintTime());
         int i = insertDataToList(tipsMessage);
         messageRecycleListAdatper.addData(i);
-//        messageListView.smoothScrollToPosition(i);
-//        messageListAdapter.notifyDataSetChanged();
+        recyclerview.smoothScrollToPosition(i);
     }
 
     private int insertDataToList(HoverMessage msg) {
         int index = 0;
         switch (msg.getType()) {
             case HoverMessage.WARNING:
-                datas.add(index, msg);
+                datasList.add(index, msg);
                 ++Utils.warningCount;
                 break;
             case HoverMessage.PROMPT:
                 index = Utils.warningCount;
-                datas.add(index, msg);
+                datasList.add(index, msg);
                 ++Utils.promptCount;
                 break;
             case HoverMessage.NOTICE:
                 index = Utils.promptCount + Utils.warningCount;
-                datas.add(index, msg);
+                datasList.add(index, msg);
                 break;
 
         }
-//        Log.e("Main", "Utils.warningCount=" + Utils.warningCount +
-//                " Utils.promptCount=" + Utils.promptCount + " mDataList.size=" + datas.size()
-//                +" index="+index);
         return index;
     }
 
 
-    /**
-     * 编写一套假数据
-     */
-//    protected ArrayList<HoverMessage> initData() {
-//        ArrayList<HoverMessage> mDatas = new ArrayList<HoverMessage>();
-//        for (int i = 0; i < 100; i++) {
-//            mDatas.add("条目 :: " + i);
-//        }
-//        return mDatas;
-//    }
     @OnClick({R.id.add_item_bt, R.id.delete_item_bt})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_item_bt:
+                addMessageAndUpdate();
                 break;
             case R.id.delete_item_bt:
+                messageRecycleListAdatper.removeData(0);
                 break;
         }
     }

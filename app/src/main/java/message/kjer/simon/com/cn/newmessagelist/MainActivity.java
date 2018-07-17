@@ -22,14 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initView();
     }
-
-    private void initView() {
-
-    }
-
-
     @OnClick({R.id.listview_list, R.id.recyclerview_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {

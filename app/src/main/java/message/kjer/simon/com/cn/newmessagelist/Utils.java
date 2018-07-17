@@ -65,4 +65,9 @@ public class Utils {
             --promptCount;
         }
     }
+
+    public static void clearMsgCount() {
+        warningCount = 0;
+        promptCount = 0;
+    }
 }

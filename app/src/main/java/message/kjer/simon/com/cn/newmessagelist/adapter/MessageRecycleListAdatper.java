@@ -53,7 +53,27 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
             holder.tv.setText(content);
         }
         holder.tv.setMessage(list.get(position));
-        //自动延时消失
+        //类别添加 过滤以及 点击移除
+        if (type == 1) {
+            holder.tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tv.removeCallbacks(null);
+                    MMessageTextView vv = (MMessageTextView) v;
+                    HoverMessage msg = vv.getMessage();
+                    int indexOf = list.indexOf(msg);
+                    if (indexOf >= 0) {
+                        Log.e(Tag,"click content ="+msg.getContent());
+                        Utils.updateMsgCount(msg);
+                        list.remove(msg);
+                        notifyItemRemoved(indexOf);
+
+                    }
+                }
+            });
+            return;
+        }
+        //type =2、3 添加自动延时消失
         holder.tv.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -65,22 +85,16 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
                     }
                     int indexOf = list.indexOf(message);
                     if (indexOf >= 0) {
-                        Log.e(Tag, "position=" + position + "  list.size()=" + list.size() +
-                                " holder.tv.getMessage().getType()=" + holder.tv.getMessage()
+                        Log.e(Tag, "position= " + position + "  list.size()= " + list.size() +
+                                " holder.tv.getMessage().getType()= " + holder.tv.getMessage()
                                 .getType() + " index =" + indexOf);
                         list.remove(message);
-
-//                        notifyItemChanged(position);
                         Utils.updateMsgCount(message);
                         notifyItemRemoved(indexOf);
-//                        MessageRecycleListAdatper.this.notifyDataSetChanged();
                     }
                 }
-//                }
             }
         }, list.get(position).getHintTime());
-
-        //点击移除 、 过滤红色
     }
 
     @Override
@@ -89,22 +103,15 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
     }
 
 
-    //  添加数据
     public void addData(int position) {
-//      在list中添加数据，并通知条目加入一条
-//        list.add(position, "Insert One");
         notifyItemInserted(position);
     }
 
-    //  删除数据
     public void removeData(int position) {
         list.remove(position);
         notifyItemRemoved(position);
     }
 
-    /**
-     * ViewHolder的类，用于缓存控件
-     */
     class MyViewHolder extends RecyclerView.ViewHolder {
         MMessageTextView tv;
 
