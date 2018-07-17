@@ -63,7 +63,7 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
                     HoverMessage msg = vv.getMessage();
                     int indexOf = list.indexOf(msg);
                     if (indexOf >= 0) {
-                        Log.e(Tag,"click content ="+msg.getContent());
+                        Log.e(Tag, "click content =" + msg.getContent());
                         Utils.updateMsgCount(msg);
                         list.remove(msg);
                         notifyItemRemoved(indexOf);
@@ -78,7 +78,7 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
             @Override
             public void run() {
                 holder.tv.removeCallbacks(null);
-                if (list != null && list.size() > 0) {
+                if (list != null && list.size() >= 0) {
                     HoverMessage message = holder.tv.getMessage();
                     if (message == null) {
                         return;
@@ -108,8 +108,11 @@ public class MessageRecycleListAdatper extends RecyclerView.Adapter<MessageRecyc
     }
 
     public void removeData(int position) {
-        list.remove(position);
-        notifyItemRemoved(position);
+        if (list.size() > position) {
+            list.remove(position);
+            Utils.updateMsgCount(list.get(position));
+            notifyItemRemoved(position);
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

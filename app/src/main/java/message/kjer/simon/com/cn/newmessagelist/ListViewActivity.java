@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,10 +55,10 @@ public class ListViewActivity extends AppCompatActivity {
         messageListView.setAdapter(messageListAdapter);
 
         //整体动画
-//        Animation animation= AnimationUtils.loadAnimation(this,R.anim.item_animation);
-//        LayoutAnimationController controller=new LayoutAnimationController(animation);
-//        controller.setDelay(0.5f);
-//        messageListView.setLayoutAnimation(controller);
+        Animation animation= AnimationUtils.loadAnimation(this,R.anim.item_animation);
+        LayoutAnimationController controller=new LayoutAnimationController(animation);
+        controller.setDelay(0.5f);
+        messageListView.setLayoutAnimation(controller);
     }
 
     @OnClick({R.id.new_message_tv, R.id.add_new_message_bt})

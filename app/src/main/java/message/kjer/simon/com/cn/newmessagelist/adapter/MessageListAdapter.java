@@ -80,10 +80,11 @@ public class MessageListAdapter extends BaseAdapter {
                     removeClickItem((MMessageTextView) v, finalHolder, position);
                 }
             });
-            if (!mDataList.get(position).isFirstAdd()) {
-                finalHolder.contentTv.startAnimation(animation);
-                mDataList.get(position).setFirstAdd(true);
-            }
+            //add item  animation  need fix
+//            if (!mDataList.get(position).isFirstAdd()) {
+//                finalHolder.contentTv.startAnimation(animation);
+//                mDataList.get(position).setFirstAdd(true);
+//            }
             if (mDataList.get(position).getType() != 1) {
                 postRemoveItem(position, holder);
             }
@@ -149,7 +150,7 @@ public class MessageListAdapter extends BaseAdapter {
                         Log.e(Tag, " adapter  content= "
                                 + message.getContent() + "  indexOf=" + indexOf);
                         mDataList.remove(message);
-                        checkMap.remove(finalHolder1.contentTv.hashCode());
+//                        checkMap.remove(finalHolder1.contentTv.hashCode());
                         Utils.updateMsgCount(message);
                         MessageListAdapter.this.notifyDataSetChanged();
                     }
@@ -158,18 +159,18 @@ public class MessageListAdapter extends BaseAdapter {
         }, mDataList.get(position).getHintTime());
     }
 
-    @SuppressLint("UseSparseArrays")
-    private HashMap<Integer, Boolean> checkMap = new HashMap<>();
+//    @SuppressLint("UseSparseArrays")
+//    private HashMap<Integer, Boolean> checkMap = new HashMap<>();
 
     private class ViewHolder {
         MMessageTextView contentTv;
     }
-
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            MessageListAdapter.this.notifyDataSetChanged();
-        }
-    };
+//
+//    @SuppressLint("HandlerLeak")
+//    private Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            MessageListAdapter.this.notifyDataSetChanged();
+//        }
+//    };
 }

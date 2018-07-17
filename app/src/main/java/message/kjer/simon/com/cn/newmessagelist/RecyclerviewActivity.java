@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import message.kjer.simon.com.cn.newmessagelist.adapter.MessageRecycleListAdatper;
+import message.kjer.simon.com.cn.newmessagelist.animator.AddRemoveAnimatorImpl;
 import message.kjer.simon.com.cn.newmessagelist.bean.HoverMessage;
 
 /**
@@ -56,9 +57,9 @@ public class RecyclerviewActivity extends AppCompatActivity {
                 datasList);
         recyclerview.setAdapter(messageRecycleListAdatper);
 //      添加动画
-        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
-        defaultItemAnimator.setAddDuration(1000);
-        defaultItemAnimator.setRemoveDuration(1000);
+        AddRemoveAnimatorImpl defaultItemAnimator = new AddRemoveAnimatorImpl();
+        defaultItemAnimator.setAddDuration(800);
+        defaultItemAnimator.setRemoveDuration(800);
         recyclerview.setItemAnimator(defaultItemAnimator);
     }
 
@@ -116,20 +117,31 @@ public class RecyclerviewActivity extends AppCompatActivity {
         int index = 0;
         switch (msg.getType()) {
             case HoverMessage.WARNING:
-                datasList.add(index, msg);
-                ++Utils.warningCount;
+                if(index<=datasList.size()){
+                    datasList.add(index, msg);
+                    ++Utils.warningCount;
+                }
                 break;
             case HoverMessage.PROMPT:
                 index = Utils.warningCount;
-                datasList.add(index, msg);
-                ++Utils.promptCount;
+                if(index<=datasList.size()){
+                    datasList.add(index, msg);
+                    ++Utils.promptCount;
+                }
                 break;
             case HoverMessage.NOTICE:
                 index = Utils.promptCount + Utils.warningCount;
-                datasList.add(index, msg);
+                if(index<=datasList.size()){
+                    datasList.add(index, msg);
+                }else{
+                    Log.e(Tag,"error  ........index="+index+"  list.size()="+datasList.size());
+                }
                 break;
 
         }
+        Log.e("Main", "Utils.warningCount=" + Utils.warningCount +
+                " Utils.promptCount=" + Utils.promptCount + " datasList.size=" + datasList.size()
+                + " index=" + index);
         return index;
     }
 
