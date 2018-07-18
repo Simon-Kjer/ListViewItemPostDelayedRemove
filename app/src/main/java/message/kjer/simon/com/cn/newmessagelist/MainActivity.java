@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.listview_list, R.id.recyclerview_list})
+
+    @OnClick({R.id.listview_list, R.id.recyclerview_list,R.id.touch_view})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.listview_list:
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.recyclerview_list:
                 startActivity(new Intent(MainActivity.this, RecyclerviewActivity.class));
+                break;
+            case R.id.touch_view:
+                startActivity(new Intent(MainActivity.this, MyTouchActvity.class));
                 break;
         }
     }

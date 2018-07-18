@@ -18,5 +18,11 @@
         android:layout_height="80dp"
         android:text="Recyclerview" />
 
+    <Button
+        android:id="@+id/touch_view"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:text="Touch" />
+
 
 </LinearLayout>
